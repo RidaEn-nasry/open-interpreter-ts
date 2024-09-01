@@ -2,46 +2,47 @@ import { getStoragePath } from "@utils/localStoragePath";
 import dotenv from "dotenv";
 import envPaths from "env-paths";
 import { AppConst } from "@/const";
-
+import { Logger } from "pino";
+import { Llm } from "./llm/Llm";
 export class Interpreter {
-  messages: string[] | null;
-  responding: boolean;
-  lastMessageCount: number;
-  offline: boolean;
-  autoRun: boolean;
-  verbose: boolean;
-  debug: boolean;
-  maxOutput: number;
-  safeMode: string;
-  shrinkImages: boolean;
-  loop: boolean;
-  loopMessage: string;
-  loopBreakers: string[];
-  disableTelemetry: boolean;
-  inTerminalInterface: boolean;
-  conversationHistory: boolean;
-  conversationFilaname: string | null;
-  conversationHistoryPath: string;
-  os: boolean;
-  speakMessage: boolean;
+  private messages: string[] | null;
+  private responding: boolean;
+  private lastMessageCount: number;
+  private offline: boolean;
+  private autoRun: boolean;
+  private verbose: boolean;
+  private debug: boolean;
+  private maxOutput: number;
+  private safeMode: string;
+  private shrinkImages: boolean;
+  private loop: boolean;
+  private loopMessage: string;
+  private loopBreakers: string[];
+  private disableTelemetry: boolean;
+  private inTerminalInterface: boolean;
+  private conversationHistory: boolean;
+  private conversationFilaname: string | null;
+  private conversationHistoryPath: string;
+  private os: boolean;
+  private speakMessage: boolean;
   // change this later
-  llm: any | null;
-  systemMessage: string;
-  customerInstructions: string;
-  userMessageTemplate: string;
-  alwaysApplyMessageTemplate: boolean;
-  codeOutputTemplate: string;
-  emptyCodeOutputTemplate: string;
-  codeOutputSender: string;
+  private llm: any | null;
+  private systemMessage: string;
+  private customerInstructions: string;
+  private userMessageTemplate: string;
+  private alwaysApplyMessageTemplate: boolean;
+  private codeOutputTemplate: string;
+  private emptyCodeOutputTemplate: string;
+  private codeOutputSender: string;
   // change this later;
-  computer: any;
-  syncComputer: boolean;
-  importComputerApi: boolean;
-  skillsPath: string | null;
-  multiLine: boolean;
-  contributeConversation: boolean;
-  plainTextDisplay: boolean;
-  highlightActiveLine: boolean;
+  public computer: any;
+  private syncComputer: boolean;
+  private importComputerApi: boolean;
+  private skillsPath: string | null;
+  private multiLine: boolean;
+  private contributeConversation: boolean;
+  private plainTextDisplay: boolean;
+  private highlightActiveLine: boolean;
 
   constructor(
     messages: string[] | null,
@@ -133,7 +134,12 @@ export class Interpreter {
 
     this.computer.importSkills = importSkills;
 
-    this.llm = llm;
+    // LLM
+
+    this.llm = llm == null ? new Llm(this) : llm;
+
+  
+    // llm related
     this.systemMessage = systemMessage;
     this.customerInstructions = customerInstructions;
     this.userMessageTemplate = userMessageTemplate;

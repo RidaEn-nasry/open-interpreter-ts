@@ -30,3 +30,9 @@ export class AppConst {
     return env != undefined ? env : this.defaultUserName;
   }
 }
+
+export enum Models {
+  GPT_4O = "gpt-4o",
+  GPT_4 = "gpt-4",
+  GPT_3 = "gpt-3",
+}
